@@ -1,11 +1,15 @@
-import logo from "./logo.svg";
+import { useState } from "react";
+
 import "./App.css";
 import { increment, decrement, incrementByAmount } from "./slices/slice";
 import { addTodo } from "./slices/todo";
 import { useDispatch, useSelector } from "react-redux";
 
 function App() {
+  const [task, setTask] = useState("");
   const state = useSelector((state) => state.counter);
+  const stateTodo = useSelector((state) => state.todos);
+
   const dispatch = useDispatch();
   console.log(state);
 
@@ -21,14 +25,20 @@ function App() {
     dispatch(incrementByAmount(10));
   };
 
-  const addTodoAction=()=>{
+  const addTodoAction = () => {
+    dispatch(addTodo(task));
+    setTask("");
+  };
 
-    dispatch(addTodo("hello people"));
-
-  }
   return (
     <div className="App">
       <h1>{state.value}</h1>
+
+      <input
+        type="text"
+        value={task}
+        onChange={(e) => setTask(e.target.value)}
+      />
 
       <button onClick={handleClick}>Increment</button>
 
@@ -38,6 +48,9 @@ function App() {
 
       <button onClick={addTodoAction}>AddTodo</button>
 
+      {stateTodo.todos.map((ele) => (
+        <li>{ele}</li>
+      ))}
     </div>
   );
 }
